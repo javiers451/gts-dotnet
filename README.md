@@ -9,7 +9,7 @@ An idiomatic C#/.NET library for working with **GTS** ([Global Type System](http
 Featureset:
 
 - [x] **OP#1 - ID Validation**: Verify identifier syntax using regex patterns
-- [ ] **OP#2 - ID Extraction**: Fetch identifiers from JSON objects or JSON Schema documents
+- [x] **OP#2 - ID Extraction**: Fetch identifiers from JSON objects or JSON Schema documents
 - [x] **OP#3 - ID Parsing**: Decompose identifiers into constituent parts (vendor, package, namespace, type, version, etc.)
 - [x] **OP#4 - ID Pattern Matching**: Match identifiers against patterns containing wildcards
 - [x] **OP#5 - ID to UUID Mapping**: Generate deterministic UUIDs from GTS identifiers
@@ -36,6 +36,30 @@ Featureset:
 
 ```csharp
 using Gts;
+using Gts.Extraction;
+using System.Text.Json.Nodes;
+```
+
+### OP#2 - ID Extraction
+
+Extract entity and schema IDs from JSON objects (and JSON Schema documents). Uses `System.Text.Json` (`JsonObject` / `JsonNode`).
+
+- **ExtractId(JsonObject, GtsExtractOptions?)** — returns `ExtractResult` with `Id`, `SchemaId`, which fields were used, and `IsSchema`. `Id` is null when no valid ID is found.
+- **ExtractId(JsonNode?)** / **ExtractId(JsonElement)** — overloads for different JSON sources.
+- **ExtractEntity(JsonObject, …)** — returns `GtsJsonEntity` with parsed `GtsId`, schema ID, and all **GtsRefs** (every GTS ID in the tree with path).
+- **ExtractReferences(JsonNode?)** — walks the tree and returns all GTS IDs with their JSON paths.
+- **GtsExtractOptions.Default** — default entity fields.
+
+```csharp
+var node = JsonNode.Parse("""{ "gtsId": "gts.acme.order.ns.invoice.v1.0", "name": "Order 1" }""");
+
+var result = GtsExtract.ExtractId(node.AsObject());
+// result.Id, result.SchemaId, result.SelectedEntityField, result.IsSchema
+
+var entity = GtsExtract.ExtractEntity(node.AsObject());
+// entity.GtsId, entity.GtsRefs (all GTS IDs + paths)
+
+var refs = GtsExtract.ExtractReferences(node);
 ```
 
 ### OP#3 - ID Parsing
