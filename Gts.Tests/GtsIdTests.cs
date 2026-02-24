@@ -1,4 +1,4 @@
-﻿using Gts.Utils;
+using Gts.Utils;
 
 namespace Gts.Tests;
 
@@ -60,5 +60,23 @@ public class GtsIdTests
         var guid = id.ToGuid();
         
         Assert.Equal(GuidUtils.Create(GuidUtils.GtsNamespace, id.Id), guid);
+    }
+
+    [Fact]
+    public void ToStringReturnsId()
+    {
+        var idStr = "gts.vendor.package.namespace.type.v1.0~";
+        var id = GtsId.Parse(idStr);
+        Assert.Equal(idStr, id.ToString());
+        Assert.Equal(id.Id, id.ToString());
+    }
+
+    [Fact]
+    public void ToStringReturnsPattern()
+    {
+        var patternStr = "gts.vendor.package.namespace.type.*";
+        var pattern = GtsId.ParsePattern(patternStr);
+        Assert.Equal(patternStr, pattern.ToString());
+        Assert.Equal(pattern.Id, pattern.ToString());
     }
 }

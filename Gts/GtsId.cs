@@ -196,7 +196,7 @@ public sealed class GtsId
 
         return true;
     }
-    
+
     /// <summary>
     /// Generates a deterministic UUID v5 from this GTS identifier using the GTS namespace.
     /// </summary>
@@ -204,4 +204,9 @@ public sealed class GtsId
     {
         return GuidUtils.Create(GuidUtils.GtsNamespace, Id);
     }
+
+    /// <summary>
+    /// Returns the canonical identifier string (same as <see cref="Id"/>).
+    /// </summary>
+    public override string ToString() => Id;
 }
