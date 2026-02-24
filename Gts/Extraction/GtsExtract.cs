@@ -21,15 +21,15 @@ public static class GtsExtract
         options ??= GtsExtractOptions.Default;
         var entity = ExtractEntityInternal(json, options);
 
-        string id;
+        string? id;
         if (entity.IsSchema || entity.GtsId != null)
         {
-            id = entity.GtsId?.Id ?? "";
+            id = entity.GtsId?.Id;
         }
         else
         {
             // Anonymous instance: use value from selected entity field (GetFieldValue trims; strips gts:// only for $id)
-            id = entity.SelectedEntityField != null ? GetFieldValue(json, entity.SelectedEntityField) ?? "" : "";
+            id = entity.SelectedEntityField != null ? GetFieldValue(json, entity.SelectedEntityField) : null;
         }
 
         return new ExtractResult(
@@ -41,14 +41,14 @@ public static class GtsExtract
     }
 
     /// <summary>
-    /// Extracts ID if the root is a JSON object; otherwise returns a result with empty Id.
+    /// Extracts ID if the root is a JSON object; otherwise returns a result with null Id.
     /// </summary>
     public static ExtractResult ExtractId(JsonNode? node, GtsExtractOptions? options = null)
     {
         if (node is JsonObject obj)
             return ExtractId(obj, options);
         
-        return new ExtractResult("", null, null, null, false);
+        return new ExtractResult(null, null, null, null, false);
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ public static class GtsExtract
         if (node is JsonObject obj)
             return ExtractId(obj, options);
         
-        return new ExtractResult("", null, null, null, false);
+        return new ExtractResult(null, null, null, null, false);
     }
 
     /// <summary>
@@ -219,19 +219,40 @@ public static class GtsExtract
 
     private static (string? field, string? value) FirstNonEmptyField(JsonObject json, IReadOnlyList<string> propertyNames)
     {
-        foreach (var name in propertyNames)
+        foreach (var (key, _) in json)
         {
-            var val = GetFieldValue(json, name);
-            if (!string.IsNullOrEmpty(val) && IsValidGtsId(val))
-                return (name, val);
+            if (propertyNames.Contains(key))
+            {
+                var val = GetFieldValue(json, key);
+                if (!string.IsNullOrEmpty(val) && IsValidGtsId(val))
+                    return (key, val);
+            }
         }
         
-        foreach (var name in propertyNames)
+        foreach (var (key, _) in json)
         {
-            var val = GetFieldValue(json, name);
-            if (!string.IsNullOrEmpty(val))
-                return (name, val);
+            if (propertyNames.Contains(key))
+            {
+                var val = GetFieldValue(json, key);
+                if (!string.IsNullOrEmpty(val))
+                    return (key, val);
+            }
         }
+        
+        // TODO: bellow original AI impl
+        // foreach (var name in propertyNames)
+        // {
+        //     var val = GetFieldValue(json, name);
+        //     if (!string.IsNullOrEmpty(val) && IsValidGtsId(val))
+        //         return (name, val);
+        // }
+        //
+        // foreach (var name in propertyNames)
+        // {
+        //     var val = GetFieldValue(json, name);
+        //     if (!string.IsNullOrEmpty(val))
+        //         return (name, val);
+        // }
         
         return (null, null);
     }
