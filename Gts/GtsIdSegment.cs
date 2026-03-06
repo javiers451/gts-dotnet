@@ -57,7 +57,7 @@ public sealed class GtsIdSegment
     public override string ToString()
     {
         var sb = new StringBuilder(
-            Vendor?.Length ?? 0 + Package?.Length ?? 0 + Namespace?.Length + Type?.Length ?? 0
+            (Vendor?.Length ?? 0) + (Package?.Length ?? 0) + (Namespace?.Length ?? 0) + (Type?.Length ?? 0)
                 + (VersionMajor.HasValue ? 2 : 0) // rough estimation for version
                 + (VersionMinor.HasValue ? 2 : 0)
         );
