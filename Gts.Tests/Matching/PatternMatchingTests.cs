@@ -33,6 +33,16 @@ public class PatternMatchingTests
     }
 
     [Fact]
+    public void DoesNotMatchShorterNonWildcardPattern()
+    {
+        var candidate = GtsId.Parse("gts.x.pkg.ns.type.v1.5~abc.app.events.custom.v1.2");
+        var pattern = GtsId.ParsePattern("gts.x.pkg.ns.type.v1.5");
+        
+        Assert.False(candidate.Matches(pattern));
+        Assert.False(candidate.Matches("gts.x.pkg.ns.type.v1.5"));
+    }
+
+    [Fact]
     public void MatchesVendorPrefixWildcard()
     {
         var candidate = GtsId.Parse("gts.vendor.pkg.ns.type.v1~");

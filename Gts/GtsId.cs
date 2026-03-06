@@ -149,16 +149,16 @@ public sealed class GtsId
     /// </summary>
     public bool Matches(GtsId pattern)
     {
-        // TODO: this logic is probably flawed, check
         if (pattern is null) return false;
 
+        // TODO: counting is probably not needed
         if (!pattern.Id.Contains('*'))
-            return MatchSegments(pattern.Segments, Segments);
+            return MatchSegments(pattern.Segments, Segments, true);
 
         if (pattern.Id.Count(c => c == '*') > 1 || !pattern.Id.EndsWith('*'))
             return false;
 
-        return MatchSegments(pattern.Segments, Segments);
+        return MatchSegments(pattern.Segments, Segments, false);
     }
 
     /// <summary>
@@ -174,8 +174,9 @@ public sealed class GtsId
     }
 
     private static bool MatchSegments(
-        IReadOnlyCollection<GtsIdSegment> patternSegs, IReadOnlyCollection<GtsIdSegment> candidateSegs)
+        IReadOnlyCollection<GtsIdSegment> patternSegs, IReadOnlyCollection<GtsIdSegment> candidateSegs, bool exact)
     {
+        if (exact && patternSegs.Count != candidateSegs.Count) return false;
         if (patternSegs.Count > candidateSegs.Count) return false;
 
         var patternList = patternSegs as IList<GtsIdSegment> ?? patternSegs.ToList();
