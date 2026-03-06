@@ -31,6 +31,7 @@ public sealed class GtsJsonEntity
     /// <summary>Display label (e.g. GTS ID or file name).</summary>
     public string Label { get; }
 
+    /// <summary>Builds a GtsJsonEntity with extracted IDs and references.</summary>
     internal GtsJsonEntity(
         GtsId? gtsId,
         string schemaId,

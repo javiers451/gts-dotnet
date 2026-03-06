@@ -15,7 +15,7 @@ public static class GtsExtract
     /// </summary>
     /// <param name="json">Root JSON object.</param>
     /// <param name="options">Optional; uses default entity/schema property names if null.</param>
-    /// <returns>ExtractIdResult with Id, SchemaId, which fields were used, and IsSchema.</returns>
+    /// <returns>ExtractResult with Id, SchemaId, which fields were used, and IsSchema.</returns>
     public static ExtractResult ExtractId(JsonObject json, GtsExtractOptions? options = null)
     {
         options ??= GtsExtractOptions.Default;
@@ -43,6 +43,9 @@ public static class GtsExtract
     /// <summary>
     /// Extracts ID if the root is a JSON object; otherwise returns a result with null Id.
     /// </summary>
+    /// <param name="node">Root JSON node (object, array, or value).</param>
+    /// <param name="options">Optional; uses default property names if null.</param>
+    /// <returns>ExtractResult with Id and SchemaId when node is an object; otherwise null Id.</returns>
     public static ExtractResult ExtractId(JsonNode? node, GtsExtractOptions? options = null)
     {
         if (node is JsonObject obj)
@@ -54,6 +57,9 @@ public static class GtsExtract
     /// <summary>
     /// Extracts ID from a JSON object element (e.g. from JsonDocument.RootElement).
     /// </summary>
+    /// <param name="element">JSON element (must be Object).</param>
+    /// <param name="options">Optional; uses default property names if null.</param>
+    /// <returns>ExtractResult with Id, SchemaId, and field metadata.</returns>
     /// <exception cref="ArgumentException">Thrown when element is not ValueKind.Object.</exception>
     public static ExtractResult ExtractId(JsonElement element, GtsExtractOptions? options = null)
     {
@@ -70,6 +76,9 @@ public static class GtsExtract
     /// <summary>
     /// Builds a GtsJsonEntity with primary ID, schema ID, and all GTS references in the tree.
     /// </summary>
+    /// <param name="json">Root JSON object.</param>
+    /// <param name="options">Optional; uses default property names if null.</param>
+    /// <returns>GtsJsonEntity with GtsId, SchemaId, Content, and GtsRefs.</returns>
     public static GtsJsonEntity ExtractEntity(JsonObject json, GtsExtractOptions? options = null)
     {
         options ??= GtsExtractOptions.Default;
@@ -80,6 +89,8 @@ public static class GtsExtract
     /// <summary>
     /// Walks the JSON tree and returns every string that is a valid GTS ID, with its path.
     /// </summary>
+    /// <param name="node">Root JSON node to scan.</param>
+    /// <returns>List of GtsReference (id and source path), deduplicated by id+path.</returns>
     public static IReadOnlyList<GtsReference> ExtractReferences(JsonNode? node)
     {
         var refs = new List<GtsReference>();

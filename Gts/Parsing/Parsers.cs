@@ -5,6 +5,7 @@ using static Pidgin.Parser<char>;
 
 namespace Gts.Parsing;
 
+/// <summary>Internal parser definitions for GTS type, instance, and pattern identifiers.</summary>
 internal static class Parsers
 {
     internal static readonly Parser<char, char> Dot =
@@ -123,14 +124,17 @@ internal static class Parsers
                 (_, segments) => new IdentifierInfo(IdentifierKind.Pattern, segments))
             .Before(End);
 
+    /// <summary>Major and optional minor version from a GTS segment.</summary>
     internal record struct VersionInfo(
         int Major,
         int? Minor)
     {
+        /// <inheritdoc/>
         public override string ToString() => Minor == null
             ? $"v{Major}"
             : $"v{Major}.{Minor}";
 
+        /// <summary>Parses a version string (e.g. "v1" or "v1.0").</summary>
         public static VersionInfo? FromString(string str)
         {
             var parts = str.Substring(1).Split('.');
@@ -140,6 +144,7 @@ internal static class Parsers
         }
     }
 
+    /// <summary>Parsed segment: vendor.package.namespace.type.version or wildcard.</summary>
     internal record struct SegmentInfo(
         string? Vendor,
         string? Package,
@@ -148,6 +153,7 @@ internal static class Parsers
         VersionInfo? Version,
         bool IsWildcard);
 
+    /// <summary>Kind of GTS identifier (type, instance, or pattern).</summary>
     internal enum IdentifierKind
     {
         Type,
@@ -155,14 +161,20 @@ internal static class Parsers
         Pattern,
     }
     
+    /// <summary>Parsed identifier with kind and segment list.</summary>
     internal record struct IdentifierInfo(
         IdentifierKind Kind, IEnumerable<SegmentInfo> Segments) : IEnumerable<SegmentInfo>
     {
+        /// <summary>True if this is a type ID.</summary>
         public bool IsType => Kind == IdentifierKind.Type;
+        /// <summary>True if this is an instance ID.</summary>
         public bool IsInstance => Kind == IdentifierKind.Instance;
+        /// <summary>True if this is a pattern.</summary>
         public bool IsPattern => Kind == IdentifierKind.Pattern;
         
+        /// <inheritdoc/>
         public IEnumerator<SegmentInfo> GetEnumerator() => Segments.GetEnumerator();
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

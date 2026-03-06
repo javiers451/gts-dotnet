@@ -10,6 +10,7 @@ namespace Gts;
 /// </summary>
 public sealed class GtsId
 {
+    /// <summary>Maximum allowed length of a GTS identifier string.</summary>
     public const int MaxLength = 1024;
     
     /// <summary>
@@ -17,19 +18,13 @@ public sealed class GtsId
     /// </summary>
     public string Id { get; }
     
-    /// <summary>
-    /// ID is type
-    /// </summary>
+    /// <summary>True if this ID is a type identifier (ends with ~).</summary>
     public bool IsType { get; private set; }
     
-    /// <summary>
-    /// ID is instance
-    /// </summary>
+    /// <summary>True if this ID is an instance identifier (does not end with ~).</summary>
     public bool IsInstance { get; private set; }
     
-    /// <summary>
-    /// ID is pattern
-    /// </summary>
+    /// <summary>True if this ID was parsed as a pattern (may contain wildcards).</summary>
     public bool IsPattern { get; private set; }
     
     /// <summary>
@@ -37,12 +32,14 @@ public sealed class GtsId
     /// </summary>
     public IReadOnlyCollection<GtsIdSegment> Segments { get; }
     
+    /// <summary>Creates a GTS ID from a canonical string and parsed segments.</summary>
     internal GtsId(string id, IReadOnlyCollection<GtsIdSegment> segments)
     {
         Id = id;
         Segments = segments;
     }
     
+    /// <summary>Parses a GTS type or instance ID; throws <see cref="ParseException"/> on failure.</summary>
     public static GtsId Parse(string id)
     {
         var parseResult = TryParseInternal(id, out GtsId? result);
@@ -55,11 +52,13 @@ public sealed class GtsId
         throw new ParseException(parseResult);
     }
     
+    /// <summary>Attempts to parse a GTS type or instance ID without throwing.</summary>
     public static ParseResult TryParse(string? id, out GtsId? result)
     {   
         return TryParseInternal(id, out result);
     }
 
+    /// <summary>Parses a GTS pattern ID; throws <see cref="ParseException"/> on failure.</summary>
     public static GtsId ParsePattern(string pattern)
     {
         var parseResult = TryParsePatternInternal(pattern, out GtsId? result);
@@ -72,6 +71,7 @@ public sealed class GtsId
         throw new ParseException(parseResult);
     }
 
+    /// <summary>Attempts to parse a GTS pattern ID without throwing.</summary>
     public static ParseResult TryParsePattern(string? pattern, out GtsId? result)
     {
         return TryParsePatternInternal(pattern, out result);
@@ -216,9 +216,11 @@ public sealed class GtsId
     public Guid ToGuid()
         => GuidUtils.Create(GuidUtils.GtsNamespace, Id);
 
+    /// <inheritdoc/>
     public override bool Equals(object? obj)
         => obj is GtsId id && string.Equals(Id, id.Id, StringComparison.Ordinal);
 
+    /// <inheritdoc/>
     public override int GetHashCode()
         => StringComparer.Ordinal.GetHashCode(Id);
 

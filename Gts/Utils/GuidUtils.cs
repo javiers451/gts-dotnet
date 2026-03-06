@@ -19,6 +19,9 @@ internal static class GuidUtils
     /// <summary>
     /// Creates a UUID v5 from a namespace and name (UTF-8 bytes are hashed).
     /// </summary>
+    /// <param name="namespaceId">RFC 4122 namespace UUID.</param>
+    /// <param name="name">Name string to hash (e.g. GTS ID).</param>
+    /// <returns>The generated UUID v5.</returns>
     internal static Guid Create(Guid namespaceId, string name)
     {
         if (string.IsNullOrEmpty(name))
