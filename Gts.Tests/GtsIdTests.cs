@@ -1,3 +1,4 @@
+using Gts.Parsing;
 using Gts.Utils;
 
 namespace Gts.Tests;
@@ -51,6 +52,12 @@ public class GtsIdTests
         Assert.False(id.IsInstance);
         Assert.True(id.IsPattern);
         Assert.Equal(2, id.Segments.Count);
+    }
+    
+    [Fact]
+    public void CannotBeParsedWithTrailingStringCharacters()
+    {
+        Assert.Throws<ParseException>(() => GtsId.Parse("gts.vendor.package.namespace.type.v1.0~ "));
     }
 
     [Fact]

@@ -28,12 +28,12 @@ internal static class Parsers
     internal static readonly Parser<char, VersionInfo> VersionFull =
         VersionMajor.Then(
             Dot.Then(VersionMinor).Optional(),
-            (major, minor) => new VersionInfo(major, minor.HasValue ? minor.Value : null)
-        )
-        .Labelled(nameof(VersionMajor));
+            (major, minor) => new VersionInfo(major, minor.HasValue ? minor.Value : null))
+            .Labelled(nameof(VersionFull));
 
     internal static readonly Parser<char, string> VersionFullString =
-        VersionFull.Select(v => v.ToString());
+        VersionFull.Select(v => v.ToString())
+            .Labelled(nameof(VersionFullString));
 
     // internal static readonly Parser<char, VersionInfo?> VersionSuffix =
     //     Dot.Then(VersionFull)
@@ -108,17 +108,20 @@ internal static class Parsers
     internal static readonly Parser<char, IdentifierInfo> GtsTypeId =
         GtsPrefix.Then(Dot)
             .Then(Segment.SeparatedAndTerminatedAtLeastOnce(Tilde),
-                (_, segments) => new IdentifierInfo(IdentifierKind.Type, segments));
+                (_, segments) => new IdentifierInfo(IdentifierKind.Type, segments))
+            .Before(End);
 
     internal static readonly Parser<char, IdentifierInfo> GtsInstanceId =
         GtsPrefix.Then(Dot)
             .Then(Segment.SeparatedAtLeastOnce(Tilde),
-                (_, segments) => new IdentifierInfo(IdentifierKind.Instance, segments));
+                (_, segments) => new IdentifierInfo(IdentifierKind.Instance, segments))
+            .Before(End);
     
     internal static readonly Parser<char, IdentifierInfo> GtsPattern =
         GtsPrefix.Then(Dot)
             .Then(Pattern.SeparatedAndOptionallyTerminatedAtLeastOnce(Tilde),
-                (_, segments) => new IdentifierInfo(IdentifierKind.Pattern, segments));
+                (_, segments) => new IdentifierInfo(IdentifierKind.Pattern, segments))
+            .Before(End);
 
     internal record struct VersionInfo(
         int Major,
