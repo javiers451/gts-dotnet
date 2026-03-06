@@ -202,19 +202,13 @@ public sealed class GtsId
     /// Generates a deterministic UUID v5 from this GTS identifier using the GTS namespace.
     /// </summary>
     public Guid ToGuid()
-    {
-        return GuidUtils.Create(GuidUtils.GtsNamespace, Id);
-    }
+        => GuidUtils.Create(GuidUtils.GtsNamespace, Id);
 
     public override bool Equals(object? obj)
-    {
-        return Id.Equals(obj);
-    }
+        => obj is GtsId id && string.Equals(Id, id.Id, StringComparison.Ordinal);
 
     public override int GetHashCode()
-    {
-        return Id.GetHashCode();
-    }
+        => StringComparer.Ordinal.GetHashCode(Id);
 
     /// <summary>
     /// Returns the canonical identifier string (same as <see cref="Id"/>).

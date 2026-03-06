@@ -79,4 +79,29 @@ public class GtsIdTests
         Assert.Equal(patternStr, pattern.ToString());
         Assert.Equal(pattern.Id, pattern.ToString());
     }
+
+    [Fact]
+    public void GetHashCodeIsTheSameAsGetHashCodeForString()
+    {
+        var str = "gts.vendor.package.namespace.type.v1.0~vendor2.package2.namespace2.type2.v1.0";
+        var id = GtsId.Parse(str);
+        
+        Assert.Equal(
+            StringComparer.Ordinal.GetHashCode(str),
+            id.GetHashCode());
+    }
+
+    [Fact]
+    public void EqualsIsTheSameAsEqualsForString()
+    {
+        var str1 = "gts.vendor.package.namespace.type.v1.0~vendor1.package1.namespace1.type1.v1.0";
+        var str2 = "gts.vendor.package.namespace.type.v1.0~vendor2.package2.namespace2.type2.v1.0";
+        
+        var id1 = GtsId.Parse(str1);
+        var id12 = GtsId.Parse(str1);
+        var id2 = GtsId.Parse(str2);
+        
+        Assert.Equal(id1, id12);
+        Assert.NotEqual(id1, id2);
+    }
 }
