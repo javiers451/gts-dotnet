@@ -29,7 +29,7 @@ public abstract class GtsRegistry
         return _store.GetAsync(id);
     }
 
-    public ValueTask<IEnumerable<GtsJsonEntity>> GetAllAsync()
+    public ValueTask<IList<GtsJsonEntity>> GetAllAsync()
     {
         return _store.GetAllAsync();
     }

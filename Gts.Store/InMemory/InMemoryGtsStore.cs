@@ -26,9 +26,9 @@ internal class InMemoryGtsStore<T> : IGtsStore
         return ValueTask.FromResult(entity);
     }
 
-    public ValueTask<IEnumerable<GtsJsonEntity>> GetAllAsync()
+    public ValueTask<IList<GtsJsonEntity>> GetAllAsync()
     {
-        return ValueTask.FromResult(_entities.Values.AsEnumerable());
+        return ValueTask.FromResult<IList<GtsJsonEntity>>(_entities.Values.ToArray());
     }
 
     public ValueTask<int> CountAsync()

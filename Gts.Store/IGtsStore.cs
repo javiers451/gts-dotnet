@@ -8,7 +8,7 @@ public interface IGtsStore
     
     ValueTask<GtsJsonEntity?> GetAsync(GtsId id);
     
-    ValueTask<IEnumerable<GtsJsonEntity>> GetAllAsync();
+    ValueTask<IList<GtsJsonEntity>> GetAllAsync();
     
     ValueTask<int> CountAsync();
     
