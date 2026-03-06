@@ -57,7 +57,25 @@ public class GtsIdTests
     [Fact]
     public void CannotBeParsedWithTrailingStringCharacters()
     {
-        Assert.Throws<ParseException>(() => GtsId.Parse("gts.vendor.package.namespace.type.v1.0~ "));
+        var str = "gts.vendor.package.namespace.type.v1.0~ ";
+        
+        Assert.False(GtsId.TryParse(str, out _));
+        Assert.Throws<ParseException>(() => GtsId.Parse(str));
+        
+        Assert.False(GtsId.TryParsePattern(str, out _));
+        Assert.Throws<ParseException>(() => GtsId.ParsePattern(str));
+    }
+    
+    [Fact]
+    public void CannotBeParsedWithNullAsInput()
+    {
+        string? str = null;
+        
+        Assert.False(GtsId.TryParse(str, out _));
+        Assert.Throws<ParseException>(() => GtsId.Parse(str));
+        
+        Assert.False(GtsId.TryParsePattern(str, out _));
+        Assert.Throws<ParseException>(() => GtsId.ParsePattern(str));
     }
 
     [Fact]

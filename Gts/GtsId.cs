@@ -55,8 +55,8 @@ public sealed class GtsId
         throw new ParseException(parseResult);
     }
     
-    public static ParseResult TryParse(string id, out GtsId? result)
-    {
+    public static ParseResult TryParse(string? id, out GtsId? result)
+    {   
         return TryParseInternal(id, out result);
     }
 
@@ -72,13 +72,19 @@ public sealed class GtsId
         throw new ParseException(parseResult);
     }
 
-    public static ParseResult TryParsePattern(string pattern, out GtsId? result)
+    public static ParseResult TryParsePattern(string? pattern, out GtsId? result)
     {
         return TryParsePatternInternal(pattern, out result);
     }
 
-    private static ParseResult TryParseInternal(string id, out GtsId? result)
+    private static ParseResult TryParseInternal(string? id, out GtsId? result)
     {
+        if (id is null)
+        {
+            result = null;
+            return ParseResult.ArgumentIsNull;
+        }
+        
         var (parseResult, isType) = id.EndsWith("~")
             ? (Parsers.GtsTypeId.Parse(id), true)
             : (Parsers.GtsInstanceId.Parse(id), false);
@@ -103,8 +109,14 @@ public sealed class GtsId
         return ParseResult.Success;
     }
 
-    private static ParseResult TryParsePatternInternal(string pattern, out GtsId? result)
+    private static ParseResult TryParsePatternInternal(string? pattern, out GtsId? result)
     {
+        if (pattern is null)
+        {
+            result = null;
+            return ParseResult.ArgumentIsNull;
+        }
+        
         var parseResult = Parsers.GtsPattern.Parse(pattern);
         
         if (!parseResult.Success)
