@@ -11,6 +11,9 @@ public abstract class GtsRegistry
 
     protected GtsRegistry(IGtsStore store, GtsRegistryConfig config)
     {
+        ArgumentNullException.ThrowIfNull(store);
+        ArgumentNullException.ThrowIfNull(config);
+        
         _store = store;
         Config = config;
     }
