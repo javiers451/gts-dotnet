@@ -275,40 +275,41 @@ public sealed class GtsJsonEntity
 
     private static (string? field, string? value) FirstNonEmptyField(JsonObject json, IReadOnlyList<string> propertyNames)
     {
-        foreach (var (key, _) in json)
-        {
-            if (propertyNames.Contains(key))
-            {
-                var val = GetFieldValue(json, key);
-                if (!string.IsNullOrEmpty(val) && IsValidGtsId(val))
-                    return (key, val);
-            }
-        }
-
-        foreach (var (key, _) in json)
-        {
-            if (propertyNames.Contains(key))
-            {
-                var val = GetFieldValue(json, key);
-                if (!string.IsNullOrEmpty(val))
-                    return (key, val);
-            }
-        }
-
-        // TODO: bellow original AI impl
-        // foreach (var name in propertyNames)
+        // TODO: check this impl
+        // foreach (var (key, _) in json)
         // {
-        //     var val = GetFieldValue(json, name);
-        //     if (!string.IsNullOrEmpty(val) && IsValidGtsId(val))
-        //         return (name, val);
+        //     if (propertyNames.Contains(key))
+        //     {
+        //         var val = GetFieldValue(json, key);
+        //         if (!string.IsNullOrEmpty(val) && IsValidGtsId(val))
+        //             return (key, val);
+        //     }
         // }
         //
-        // foreach (var name in propertyNames)
+        // foreach (var (key, _) in json)
         // {
-        //     var val = GetFieldValue(json, name);
-        //     if (!string.IsNullOrEmpty(val))
-        //         return (name, val);
+        //     if (propertyNames.Contains(key))
+        //     {
+        //         var val = GetFieldValue(json, key);
+        //         if (!string.IsNullOrEmpty(val))
+        //             return (key, val);
+        //     }
         // }
+
+        // TODO: bellow original AI impl
+        foreach (var name in propertyNames)
+        {
+            var val = GetFieldValue(json, name);
+            if (!string.IsNullOrEmpty(val) && IsValidGtsId(val))
+                return (name, val);
+        }
+        
+        foreach (var name in propertyNames)
+        {
+            var val = GetFieldValue(json, name);
+            if (!string.IsNullOrEmpty(val))
+                return (name, val);
+        }
 
         return (null, null);
     }
