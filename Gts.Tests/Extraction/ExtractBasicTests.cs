@@ -19,7 +19,7 @@ public class ExtractBasicTests
     {
         var gtsId = "gts.vendor.package.namespace.type.v0~a.b.c.d.v1";
         
-        var result = GtsExtract.ExtractId(new JsonObject
+        var result = GtsJsonEntity.ExtractId(new JsonObject
         {
             [id] = gtsId,
             ["name"] = "Some Name"
@@ -35,7 +35,7 @@ public class ExtractBasicTests
     {
         var gtsId = "gts.vendor.package.namespace.type.v0~a.b.c.d.v1";
         
-        var result = GtsExtract.ExtractId(new JsonObject
+        var result = GtsJsonEntity.ExtractId(new JsonObject
         {
             [id] = gtsId,
             ["name"] = "Some Name",
@@ -51,7 +51,7 @@ public class ExtractBasicTests
     {
         var gtsId = "gts.vendor.package.namespace.type.v0~a.b.c.d.v1";
         
-        var result = GtsExtract.ExtractId(
+        var result = GtsJsonEntity.ExtractId(
             new JsonObject
             {
                 [id] = gtsId,
@@ -67,7 +67,7 @@ public class ExtractBasicTests
     public void ExtractingOneOfDefaultIdsReturnsIdsByOrdering()
     {
         var gtsId = "gts.vendor.package.namespace.type.v0~a.b.c.d.v1";
-        var result = GtsExtract.ExtractId(
+        var result = GtsJsonEntity.ExtractId(
             new JsonObject
             {
                 ["name"] = "Some Name",
@@ -82,7 +82,7 @@ public class ExtractBasicTests
     [Fact]
     public void ExtractingDollarIdReturnsIdWithStrippedPrefix()
     {
-        var result = GtsExtract.ExtractId(
+        var result = GtsJsonEntity.ExtractId(
             new JsonObject
             {
                 ["$id"] = "gts://gts.vendor.package.namespace.type.v1.0~",
@@ -96,7 +96,7 @@ public class ExtractBasicTests
     [Fact]
     public void ExtractingInvalidIdFallbacksToNextValidId()
     {
-        var result = GtsExtract.ExtractId(
+        var result = GtsJsonEntity.ExtractId(
             new JsonObject
             {
                 ["gtsId"] = "invalid-id", // invalid
@@ -111,7 +111,7 @@ public class ExtractBasicTests
     [Fact]
     public void ExtractingIdReturnsNullWhenValidIdDoesNotExist()
     {
-        var result = GtsExtract.ExtractId(
+        var result = GtsJsonEntity.ExtractId(
             new JsonObject
             {
                 ["name"] = "Some Name",

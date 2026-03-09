@@ -8,7 +8,7 @@ public class ExtractEntityTests
     [Fact]
     public void ExtractingPopulatesRefsWithIds()
     {
-        var entity = GtsExtract.ExtractEntity(new JsonObject
+        var entity = GtsJsonEntity.ExtractEntity(new JsonObject
         {
             ["$id"] = "gts.x.test.core.schema.v1~",
             ["$ref"] = "gts.x.test.core.base.v1~",
@@ -21,7 +21,7 @@ public class ExtractEntityTests
     [Fact]
     public void ExtractingPopulatesRefsWithExplicitRefs()
     {
-        var entity = GtsExtract.ExtractEntity(new JsonObject
+        var entity = GtsJsonEntity.ExtractEntity(new JsonObject
         {
             ["$id"] = "gts.x.test.core.schema.v1~",
             ["$ref"] = "gts.x.test.core.base.v1~",
@@ -34,7 +34,7 @@ public class ExtractEntityTests
     [Fact]
     public void ExtractingPopulatesRefsWithExplicitNestedObjectRefs()
     {
-        var entity = GtsExtract.ExtractEntity(new JsonObject
+        var entity = GtsJsonEntity.ExtractEntity(new JsonObject
         {
             ["$id"] = "gts.x.test.core.schema.v1~",
             ["properties"] = new JsonObject
@@ -53,7 +53,7 @@ public class ExtractEntityTests
     [Fact]
     public void ExtractingPopulatesRefsWithExplicitNestedArrayRefs()
     {
-        var entity = GtsExtract.ExtractEntity(new JsonObject
+        var entity = GtsJsonEntity.ExtractEntity(new JsonObject
         {
             ["$id"] = "gts.x.test.core.schema.v1~",
             ["items"] = new JsonArray

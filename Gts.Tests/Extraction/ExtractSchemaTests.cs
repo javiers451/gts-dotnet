@@ -10,7 +10,7 @@ public class ExtractSchemaTests
     {
         var gtsId = "gts.vendor.package.namespace.type.v0~a.b.c.d.v1";
         
-        var result = GtsExtract.ExtractId(new JsonObject
+        var result = GtsJsonEntity.ExtractId(new JsonObject
         {
             ["id"] = gtsId,
             ["name"] = "Some Name"
@@ -35,7 +35,7 @@ public class ExtractSchemaTests
         var gtsId = "a.b.c.d.v1";
         var schema = "gts.vendor.package.namespace.type.v0~";
         
-        var result = GtsExtract.ExtractId(new JsonObject
+        var result = GtsJsonEntity.ExtractId(new JsonObject
         {
             ["id"] = gtsId,
             ["name"] = "Some Name",
@@ -50,7 +50,7 @@ public class ExtractSchemaTests
     [Fact]
     public void ExtractingDollarSchemaReturnsSchemaFromSpecifiedField()
     {
-        var result = GtsExtract.ExtractId(
+        var result = GtsJsonEntity.ExtractId(
             new JsonObject
             {
                 ["id"] = "gts.vendor.package.namespace.type.v1.0~",
